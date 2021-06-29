@@ -9,25 +9,31 @@ const {width, height} = Dimensions.get('window');
 //  Funtion Start From Here--------------------------
 
 export default function HomeScreen({navigation}) {
+  const [data, setData] = useState(null);
   useEffect(() => {
-    const subscriber = firestore()
+    firestore()
       .collection('Task')
       .get()
       .then(querySnapshot => {
         console.log('Total users: ', querySnapshot.size);
-
+        const dataArr = [];
         querySnapshot.forEach(documentSnapshot => {
+          const {date, text} = documentSnapshot.data();
+          dataArr.push({date, text});
           console.log(
             'User ID: ',
             documentSnapshot.id,
             documentSnapshot.data(),
           );
         });
+        
+        setData(dataArr);
       });
     // Stop listening for updates when no longer required
-    return () => subscriber();
-  });
+  }, []);
 
+
+  console.log("My data",data);
   return (
     <View style={styles.mainView}>
       <Card containerStyle={{borderRadius: width * 0.05}}>

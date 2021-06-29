@@ -16,6 +16,8 @@ import {Card, ListItem, Button, Icon} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
+import RNCalendarEvents from 'react-native-calendar-events';
+
 const db = firestore();
 
 const {width, height} = Dimensions.get('window');
@@ -26,6 +28,15 @@ export default function AddTask({navigation}) {
   const [mode, setMode] = React.useState('date');
   const [show, setShow] = React.useState(false);
   const [activity, setActivity] = React.useState(false);
+
+  const requestPermission = async () => {
+    const permission = await RNCalendarEvents.requestPermissions();
+    console.log(permission);
+  };
+
+  React.useEffect(() => {
+    requestPermission();
+  }, []);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
